@@ -1,0 +1,26 @@
+{
+    "name": "String",
+    "description": "String",
+    "createdBy": "String",//under the hood (db)
+    "updatedBy": "String",//under the hood(db)
+    "hostingApps": [],//under the hood(db)
+    "category":"",
+      "fields": [{//handle by the parser
+        "id": "",
+        "name": "",
+        "order": 0,
+        "mandatory": false,
+        "attributes": [{
+          "key": "",
+          "value":""
+        }],
+        "style": [{
+          "key": "",
+          "value":""
+        }],
+        "validation": [{
+          "id": "",
+          "regex": ""
+        }]
+      }]
+}
