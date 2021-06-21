@@ -6,18 +6,24 @@ import MoreVertIcon from '@material-ui/icons/MoreVert';
 
 const ITEM_HEIGHT = 48;
 interface IMoveResult {
-  droppable: React.ReactElement<{}, string | React.JSXElementConstructor<any>>[];
-  droppable2: React.ReactElement<{}, string | React.JSXElementConstructor<any>>[];
+  droppable: IFormField[];
+  droppable2: IFormField[];
+}
+interface IFormField{
+  id: number;
+  name: string;
+  component: React.ReactElement<{}, string | React.JSXElementConstructor<any>>;
+  order: number;
 }
 interface IFormDisplay {
-  components: React.ReactElement<{}, string | React.JSXElementConstructor<any>>[];
-  selected: React.ReactElement<{}, string | React.JSXElementConstructor<any>>[];
+  components: IFormField[];
+  selected: IFormField[];
   formName: string;
   category: string;
   description: string;
 }
 
-const reorder = (list: React.ReactElement<{}, string | React.JSXElementConstructor<any>>[], startIndex: number, endIndex: number): React.ReactElement<{}, string | React.JSXElementConstructor<any>>[] => {
+const reorder = (list: IFormField[], startIndex: number, endIndex: number): IFormField[] => {
   
   const result = [...list];
   const [removed] = result.splice(startIndex, 1);
@@ -30,7 +36,7 @@ const reorder = (list: React.ReactElement<{}, string | React.JSXElementConstruct
 /**
  * Moves an item from one list to another list.
  */
- const move = (source: React.ReactElement<{}, string | React.JSXElementConstructor<any>>[], destination: React.ReactElement<{}, string | React.JSXElementConstructor<any>>[], droppableSource:DraggableLocation, droppableDestination:DraggableLocation):IMoveResult | any => {
+ const move = (source: IFormField[], destination: IFormField[], droppableSource:DraggableLocation, droppableDestination:DraggableLocation):IMoveResult | any => {
   const sourceClone = [...source];
   const destClone = [...destination];
   const [removed] = sourceClone.splice(droppableSource.index, 1);
@@ -78,9 +84,7 @@ const FormDisplay:React.FC<IFormDisplay> = ({components,formName,category,descri
     description: ""
   };
  
-  const getList = (id: string): React.ReactElement<{}, string | React.JSXElementConstructor<any>>[] => {
-    
-    
+  const getList = (id: string): IFormField[] => {
     //@ts-ignore
     return thisState[id2List[id]];
   }
