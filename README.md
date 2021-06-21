@@ -8,11 +8,11 @@ UI for creating/building form structure
   - open this file: ...\form-builder-app\form-builder-app\node_modules\@types\react-beautiful-dnd
   - add to DraggableProvided (line 657-662) the following property: --- `placeholder?: React.ReactElement<HTMLElement> | null;` ---
   - the inteface should look like the following:
-      `export interface DraggableProvided {
-        innerRef(element?: HTMLElement | null): any;
-        draggableProps: DraggableProvidedDraggableProps;
-        placeholder?: React.ReactElement<HTMLElement> | null;
-        dragHandleProps?: DraggableProvidedDragHandleProps;
-    }`
+      _`export interface DraggableProvided {
+        __innerRef(element?: HTMLElement | null): any;
+        __draggableProps: DraggableProvidedDraggableProps;
+        __placeholder?: React.ReactElement<HTMLElement> | null;
+        __dragHandleProps?: DraggableProvidedDragHandleProps;
+    _}`
 
 
