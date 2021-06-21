@@ -39,6 +39,12 @@ function App() {
     }]
   };
 
+  interface IFormField{
+    id:number;
+    name: string;
+    component:React.ReactElement<{}, string | React.JSXElementConstructor<any>>;
+    order: number;
+  }
 
   const [formName, setFormName] = useState('[Form Name]');
   const [category, setCategory] = useState('[Category]');
@@ -104,21 +110,22 @@ function App() {
     }
   }
 
-  const [currentComp, setCurrentComp] = useState<ReactElement<{}>[]>([]);
+  const [currentComp, setCurrentComp] = useState<IFormField[]>([]);
   const [currentType, setCurrentType] = useState('text');
-  
+  const [order, setOrder] = useState(0);
 
   const handleAddFieldBtnClickEvent = (fieldType: string) => {
     //add field to form
+    setOrder(order+1);
     console.log('adding ' + fieldType + ' to form')
    switch(fieldType){
-    case "text": setCurrentComp([...currentComp ,<CustomTextField fieldName={fieldName}/>]) ;
+    case "text": setCurrentComp([...currentComp ,{id:100, name:fieldName, component:<CustomTextField fieldName={fieldName} />,order:order}]);
        break;
-    case "datePicker": setCurrentComp([...currentComp ,<CustomDatePicker fieldName={fieldName} />]) ;
+    case "datePicker": setCurrentComp([...currentComp ,{id:101, name:fieldName, component:<CustomDatePicker fieldName={fieldName} />,order:order}]);
        break;
-    case "button": setCurrentComp([...currentComp, <CustomButton fieldName={fieldName} onClickEvent={(fieldName: string) => alert('button ' + fieldName + ' clicked \n you can interact with the change event like this example')} />]) ;
+    case "button": setCurrentComp([...currentComp, {id:102, name:fieldName, component:<CustomButton fieldName={fieldName} onClickEvent={(fieldName: string) => alert('button ' + fieldName + ' clicked \n you can interact with the change event like this example')} />,order:order}]);
       break;
-    case "checkBox": setCurrentComp([...currentComp ,<CustomCheckbox fieldName={fieldName} onChangeEvent={(checked: boolean) => alert(checked +' to '+ !checked +'\n you can interact with the change event like this example')} />]) ;
+    case "checkBox": setCurrentComp([...currentComp , {id:103, name:fieldName, component:<CustomCheckbox fieldName={fieldName} onChangeEvent={(checked: boolean) => alert(checked +' to '+ !checked +'\n you can interact with the change event like this example')} />,order:order}]);
         break;
    }
 

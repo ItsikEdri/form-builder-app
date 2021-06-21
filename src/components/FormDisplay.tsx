@@ -1,23 +1,30 @@
-import React from "react";
+import React, {useState} from "react";
 import {DragDropContext,Draggable,Droppable,DroppableProvided,DraggableLocation,DropResult,DroppableStateSnapshot, DraggableProvided, DraggableStateSnapshot} from 'react-beautiful-dnd';
-import {IconButton, Menu, MenuItem} from '@material-ui/core';
+import {IconButton, Menu, MenuItem,Button} from '@material-ui/core';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 
 
 const ITEM_HEIGHT = 48;
+
+interface IFormField{
+  id:number;
+  name: string;
+  component:React.ReactElement<{}, string | React.JSXElementConstructor<any>>;
+  order: number;
+}
 interface IMoveResult {
-  droppable: React.ReactElement<{}, string | React.JSXElementConstructor<any>>[];
-  droppable2: React.ReactElement<{}, string | React.JSXElementConstructor<any>>[];
+  droppable: IFormField[];
+  droppable2: IFormField[];
 }
 interface IFormDisplay {
-  components: React.ReactElement<{}, string | React.JSXElementConstructor<any>>[];
-  selected: React.ReactElement<{}, string | React.JSXElementConstructor<any>>[];
+  components: IFormField[];
+  selected: IFormField[];
   formName: string;
   category: string;
   description: string;
 }
 
-const reorder = (list: React.ReactElement<{}, string | React.JSXElementConstructor<any>>[], startIndex: number, endIndex: number): React.ReactElement<{}, string | React.JSXElementConstructor<any>>[] => {
+const reorder = (list: IFormField[], startIndex: number, endIndex: number): IFormField[] => {
   
   const result = [...list];
   const [removed] = result.splice(startIndex, 1);
@@ -30,7 +37,7 @@ const reorder = (list: React.ReactElement<{}, string | React.JSXElementConstruct
 /**
  * Moves an item from one list to another list.
  */
- const move = (source: React.ReactElement<{}, string | React.JSXElementConstructor<any>>[], destination: React.ReactElement<{}, string | React.JSXElementConstructor<any>>[], droppableSource:DraggableLocation, droppableDestination:DraggableLocation):IMoveResult | any => {
+ const move = (source: IFormField[], destination: IFormField[], droppableSource:DraggableLocation, droppableDestination:DraggableLocation):IMoveResult | any => {
   const sourceClone = [...source];
   const destClone = [...destination];
   const [removed] = sourceClone.splice(droppableSource.index, 1);
@@ -78,9 +85,7 @@ const FormDisplay:React.FC<IFormDisplay> = ({components,formName,category,descri
     description: ""
   };
  
-  const getList = (id: string): React.ReactElement<{}, string | React.JSXElementConstructor<any>>[] => {
-    
-    
+  const getList = (id: string): IFormField[] => {
     //@ts-ignore
     return thisState[id2List[id]];
   }
@@ -132,9 +137,19 @@ const FormDisplay:React.FC<IFormDisplay> = ({components,formName,category,descri
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
-    //logic for options
   };
-  const handleClose = () => {
+  const handleClose = (option:string, compInd:number) => {
+    debugger
+    switch(option){
+      case "Delete": thisState.components.filter(component => component.id !== compInd);    //remove componenet from form
+        break;
+      case "Add Attributes": alert('add attr');       //open modal
+        break;
+      case "Add Validation": alert('add validation'); //open modal
+        break;
+      case "Add Style": alert('add style');           //open modal
+        break;
+    }
     setAnchorEl(null);
   };
 
@@ -148,8 +163,10 @@ const FormDisplay:React.FC<IFormDisplay> = ({components,formName,category,descri
         <Droppable droppableId="droppable">
           {(provided:DroppableProvided, snapshot:DroppableStateSnapshot) => (
               <div className="well pad centered" ref={provided.innerRef} {...provided.droppableProps} style={getListStyle(snapshot.isDraggingOver)}>
-                  {thisState.components.map((component, index) =>
-                    <Draggable key={index} draggableId={index.toString()} index={index}>
+                  {thisState.components.map((component, index) => {
+                    let componentIndex = index
+                    return (
+                      <Draggable key={index} draggableId={index.toString()} index={index}>
                       {(providedDraggable: DraggableProvided, snapshotDraggable: DraggableStateSnapshot) => (
                         <div>
                           <div ref={providedDraggable.innerRef} {...providedDraggable.draggableProps} {...providedDraggable.dragHandleProps}
@@ -160,12 +177,13 @@ const FormDisplay:React.FC<IFormDisplay> = ({components,formName,category,descri
                             )}
                           >
                           <div className="row">
-                            <div className="col-md-11"> {component}</div>
+                            <div className="col-md-11">{component.component}</div>
                             <div className="col-md-1">
+                                 {component.order}
                                 <IconButton aria-label="more" aria-controls="long-menu" aria-haspopup="true" onClick={handleClick}>
                                   <MoreVertIcon />
                                 </IconButton>
-                                <Menu id="long-menu" anchorEl={anchorEl} keepMounted open={open} onClose={handleClose}
+                                <Menu id="long-menu" anchorEl={anchorEl} keepMounted open={open} onClose={ () => handleClose('',componentIndex)}
                                   PaperProps={{
                                     style: {
                                       maxHeight: ITEM_HEIGHT * 4.5,
@@ -173,8 +191,9 @@ const FormDisplay:React.FC<IFormDisplay> = ({components,formName,category,descri
                                     },
                                   }}
                                 >
+                                  
                                   {options.map((option) => (
-                                    <MenuItem key={option} selected={option === 'Add Attribute'} onClick={handleClose}>
+                                    <MenuItem key={option} selected={option === 'Add Attribute'} onClick={() => handleClose(option,componentIndex)}>
                                       {option}
                                       <hr/>
                                     </MenuItem>
@@ -186,7 +205,9 @@ const FormDisplay:React.FC<IFormDisplay> = ({components,formName,category,descri
                       {providedDraggable.placeholder}
                     </div>
                       )}
-        </Draggable>
+                  </Draggable>
+                    )
+                  }    
         )}
         {provided.placeholder}
       </div>
