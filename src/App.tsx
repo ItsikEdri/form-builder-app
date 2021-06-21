@@ -39,12 +39,15 @@ function App() {
     }]
   };
 
+<<<<<<< Updated upstream
   interface IFormField{
     id:number;
     name: string;
     component:React.ReactElement<{}, string | React.JSXElementConstructor<any>>;
     order: number;
   }
+=======
+>>>>>>> Stashed changes
 
   const [formName, setFormName] = useState('[Form Name]');
   const [category, setCategory] = useState('[Category]');
@@ -110,6 +113,7 @@ function App() {
     }
   }
 
+<<<<<<< Updated upstream
   const [currentComp, setCurrentComp] = useState<IFormField[]>([]);
   const [currentType, setCurrentType] = useState('text');
   const [order, setOrder] = useState(0);
@@ -126,6 +130,23 @@ function App() {
     case "button": setCurrentComp([...currentComp, {id:102, name:fieldName, component:<CustomButton fieldName={fieldName} onClickEvent={(fieldName: string) => alert('button ' + fieldName + ' clicked \n you can interact with the change event like this example')} />,order:order}]);
       break;
     case "checkBox": setCurrentComp([...currentComp , {id:103, name:fieldName, component:<CustomCheckbox fieldName={fieldName} onChangeEvent={(checked: boolean) => alert(checked +' to '+ !checked +'\n you can interact with the change event like this example')} />,order:order}]);
+=======
+  const [currentComp, setCurrentComp] = useState<ReactElement<{}>[]>([]);
+  const [currentType, setCurrentType] = useState('text');
+  
+
+  const handleAddFieldBtnClickEvent = (fieldType: string) => {
+    //add field to form
+    console.log('adding ' + fieldType + ' to form')
+   switch(fieldType){
+    case "text": setCurrentComp([...currentComp ,<CustomTextField fieldName={fieldName}/>]) ;
+       break;
+    case "datePicker": setCurrentComp([...currentComp ,<CustomDatePicker fieldName={fieldName} />]) ;
+       break;
+    case "button": setCurrentComp([...currentComp, <CustomButton fieldName={fieldName} onClickEvent={(fieldName: string) => alert('button ' + fieldName + ' clicked \n you can interact with the change event like this example')} />]) ;
+      break;
+    case "checkBox": setCurrentComp([...currentComp ,<CustomCheckbox fieldName={fieldName} onChangeEvent={(checked: boolean) => alert(checked +' to '+ !checked +'\n you can interact with the change event like this example')} />]) ;
+>>>>>>> Stashed changes
         break;
    }
 
