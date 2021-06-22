@@ -14,7 +14,7 @@ const CustomDatePicker:React.FC<ICustomDatePicker> = ({fieldName}) => {
                 label={fieldName}
                 type="date"
                 className="fullwidth"
-                defaultValue="2017-05-24"
+                defaultValue="1976-10-01"
                 InputLabelProps={{
                 shrink: true,
                 }}
